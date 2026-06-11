@@ -1,6 +1,6 @@
-## O que é o NetBox?
+# O que é o NetBox?
 
-# O NetBox é uma plataforma open source desenvolvida para documentação, inventário e modelagem de infraestrutura de TI. Originalmente criado pela equipe da DigitalOcean, o projeto tem como principal objetivo centralizar todas as informações relacionadas aos ativos tecnológicos de uma organização em um único local.
+O NetBox é uma plataforma open source desenvolvida para documentação, inventário e modelagem de infraestrutura de TI. Originalmente criado pela equipe da DigitalOcean, o projeto tem como principal objetivo centralizar todas as informações relacionadas aos ativos tecnológicos de uma organização em um único local.
 
 Diferentemente de uma simples planilha de inventário, o NetBox foi projetado para ser uma fonte única de verdade (Source of Truth) para ambientes de infraestrutura, permitindo o gerenciamento de:
 
