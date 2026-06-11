@@ -1,163 +1,82 @@
-# netbox-docker
+## O que é o NetBox?
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/netbox-community/netbox-docker)][github-release]
-[![GitHub stars](https://img.shields.io/github/stars/netbox-community/netbox-docker)][github-stargazers]
-![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed-raw/netbox-community/netbox-docker)
-![Github release workflow](https://img.shields.io/github/actions/workflow/status/netbox-community/netbox-docker/release.yml?branch=release)
-![Docker Pulls](https://img.shields.io/docker/pulls/netboxcommunity/netbox)
-[![GitHub license](https://img.shields.io/github/license/netbox-community/netbox-docker)][netbox-docker-license]
+# O NetBox é uma plataforma open source desenvolvida para documentação, inventário e modelagem de infraestrutura de TI. Originalmente criado pela equipe da DigitalOcean, o projeto tem como principal objetivo centralizar todas as informações relacionadas aos ativos tecnológicos de uma organização em um único local.
 
-[The GitHub repository][netbox-docker-github] houses the components needed to build NetBox as a container.
-Images are built regularly using the code in that repository
-and are pushed to [Docker Hub][netbox-dockerhub],
-[Quay.io][netbox-quayio] and [GitHub Container Registry][netbox-ghcr].
-_NetBox Docker_ is a project developed and maintained by the _NetBox_ community.
+Diferentemente de uma simples planilha de inventário, o NetBox foi projetado para ser uma fonte única de verdade (Source of Truth) para ambientes de infraestrutura, permitindo o gerenciamento de:
 
-Do you have any questions?
-Before opening an issue on GitHub,
-please join [our Slack][netbox-docker-slack]
-and ask for help in the [`#netbox-docker`][netbox-docker-slack-channel] channel,
-or start a new [GitHub Discussion][github-discussions].
+Equipamentos de rede (Switches, Roteadores, Firewalls)
+Servidores físicos e virtuais
+Racks e Data Centers
+Endereçamento IP (IPAM)
+VLANs e VRFs
+Cabos e conexões físicas
+Máquinas virtuais
+Fabricantes e modelos de equipamentos
+Inventário de ativos de TI
+Documentação de topologia de rede
+Circuitos de telecomunicações
 
-[github-stargazers]: https://github.com/netbox-community/netbox-docker/stargazers
-[github-release]: https://github.com/netbox-community/netbox-docker/releases
-[netbox-dockerhub]: https://hub.docker.com/r/netboxcommunity/netbox/
-[netbox-quayio]: https://quay.io/repository/netboxcommunity/netbox
-[netbox-ghcr]: https://github.com/netbox-community/netbox-docker/pkgs/container/netbox
-[netbox-docker-github]: https://github.com/netbox-community/netbox-docker/
-[netbox-docker-slack]: https://join.slack.com/t/netdev-community/shared_invite/zt-mtts8g0n-Sm6Wutn62q_M4OdsaIycrQ
-[netbox-docker-slack-channel]: https://netdev-community.slack.com/archives/C01P0GEVBU7
-[netbox-slack-channel]: https://netdev-community.slack.com/archives/C01P0FRSXRV
-[netbox-docker-license]: https://github.com/netbox-community/netbox-docker/blob/release/LICENSE
-[github-discussions]: https://github.com/netbox-community/netbox-docker/discussions
+# Principais Benefícios
 
-## Quickstart
+✅ Centralização das informações de infraestrutura
 
-To get _NetBox Docker_ up and running run the following commands.
-There is a more complete [_Getting Started_ guide on our wiki][wiki-getting-started] which explains every step.
+✅ Controle completo dos ativos de TI
 
-```bash
-git clone -b release https://github.com/netbox-community/netbox-docker.git
-cd netbox-docker
-# Copy the example override file
-cp docker-compose.override.yml.example docker-compose.override.yml
-# Read and edit the file to your liking
-docker compose pull
-docker compose up
-```
+✅ Gestão visual de racks e datacenters
 
-The whole application will be available after a few minutes.
-Open the URL `http://0.0.0.0:8000/` in a web-browser.
-You should see the NetBox homepage.
+✅ Documentação de cabeamento e conexões
 
-To create the first admin user run this command:
+✅ Controle de endereçamento IP (IPAM)
 
-```bash
-docker compose exec netbox /opt/netbox/netbox/manage.py createsuperuser
-```
+✅ Integração via API REST
 
-If you need to restart Netbox from an empty database often,
-you can also set the `SUPERUSER_*` variables in your `docker-compose.override.yml`.
+✅ Automação com ferramentas como:
 
-[wiki-getting-started]: https://github.com/netbox-community/netbox-docker/wiki/Getting-Started
+Zabbix
+Ansible
+Terraform
+Nautobot
 
-## Container Image Tags
+# Contexto do Projeto NetBox em Docker Compose
+Neste projeto, o NetBox está sendo implantado utilizando containers Docker gerenciados por Docker Compose. Essa abordagem facilita a instalação, atualização, backup e manutenção da plataforma.
 
-New container images are built and published automatically every ~24h.
+# Arquitetura da Solução
 
-> We recommend to use either the `vX.Y.Z-a.b.c` tags or the `vX.Y-a.b.c` tags in production!
++---------------------+
+|     Usuários TI     |
++----------+----------+
+           |
+           v
++---------------------+
+|       NetBox        |
+|   (Container Web)   |
++----------+----------+
+           |
+           +------------------+
+           |                  |
+           v                  v
++----------------+    +----------------+
+| PostgreSQL     |    | Redis          |
+| Banco de Dados |    | Cache/Filas    |
++----------------+    +----------------+
 
-- `vX.Y.Z-a.b.c`, `vX.Y-a.b.c`:
-  These are release builds containing _NetBox version_ `vX.Y.Z`.
-  They contain the support files of _NetBox Docker version_ `a.b.c`.
-  You must use _NetBox Docker version_ `a.b.c` to guarantee the compatibility.
-  These images are automatically built from [the corresponding releases of NetBox][netbox-releases].
-- `latest-a.b.c`:
-  These are release builds, containing the latest stable version of NetBox.
-  They contain the support files of _NetBox Docker version_ `a.b.c`.
-  You must use _NetBox Docker version_ `a.b.c` to guarantee the compatibility.
-- `snapshot-a.b.c`:
-  These are prerelease builds.
-  They contain the support files of _NetBox Docker version_ `a.b.c`.
-  You must use _NetBox Docker version_ `a.b.c` to guarantee the compatibility.
-  These images are automatically built from the [`main` branch of NetBox][netbox-main].
+# Componentes Utilizados
+NetBox
 
-For each of the above tag, there is an extra tag:
+Responsável pela interface web, API REST e gerenciamento dos ativos.
 
-- `vX.Y.Z`, `vX.Y`:
-  This is the same version as `vX.Y.Z-a.b.c` (or `vX.Y-a.b.c`, respectively).
-- `latest`
-  This is the same version as `latest-a.b.c`.
-  It always points to the latest version of _NetBox Docker_.
-- `snapshot`
-  This is the same version as `snapshot-a.b.c`.
-  It always points to the latest version of _NetBox Docker_.
+PostgreSQL
 
-[netbox-releases]: https://github.com/netbox-community/netbox/releases
-[netbox-main]: https://github.com/netbox-community/netbox/tree/main
+Banco de dados utilizado para armazenar todas as informações cadastradas.
 
-## Documentation
+Redis
 
-Please refer [to our wiki on GitHub][netbox-docker-wiki] for further information on how to use the NetBox Docker image properly.
-The wiki covers advanced topics such as using files for secrets, configuring TLS, deployment to Kubernetes, monitoring and configuring LDAP.
+Utilizado para cache e processamento de tarefas assíncronas.
 
-Our wiki is a community effort.
-Feel free to correct errors, update outdated information or provide additional guides and insights.
+Docker Compose
 
-[netbox-docker-wiki]: https://github.com/netbox-community/netbox-docker/wiki/
+Orquestra todos os containers necessários para o funcionamento da solução.
 
-## Getting Help
+# Objetivo do Projeto
 
-Feel free to ask questions in our [GitHub Community][netbox-community]
-or [join our Slack][netbox-docker-slack] and ask [in our channel `#netbox-docker`][netbox-docker-slack-channel],
-which is free to use and where there are almost always people online that can help you.
-
-If you need help with using NetBox or developing for it or against it's API
-you may find [the `#netbox` channel][netbox-slack-channel] on the same Slack instance very helpful.
-
-[netbox-community]: https://github.com/netbox-community/netbox-docker/discussions
-
-## Dependencies
-
-This project relies only on _Docker_ and _docker-compose_ meeting these requirements:
-
-- The _Docker version_ must be at least `20.10.10`.
-- The _containerd version_ must be at least `1.5.6`.
-- The _docker-compose version_ must be at least `1.28.0`.
-
-To check the version installed on your system run `docker --version` and `docker compose version`.
-
-## Updating
-
-Please read [the release notes][releases] carefully when updating to a new image version.
-Note that the version of the NetBox Docker container image must stay in sync with the version of the Git repository.
-
-If you update for the first time, be sure [to follow our _How To Update NetBox Docker_ guide in the wiki][netbox-docker-wiki-updating].
-
-[releases]: https://github.com/netbox-community/netbox-docker/releases
-[netbox-docker-wiki-updating]: https://github.com/netbox-community/netbox-docker/wiki/Updating
-
-## Rebuilding the Image
-
-`./build.sh` can be used to rebuild the container image.
-See `./build.sh --help` for more information or `./build-latest.sh` for an example.
-
-For more details on custom builds [consult our wiki][netbox-docker-wiki-build].
-
-[netbox-docker-wiki-build]: https://github.com/netbox-community/netbox-docker/wiki/Build
-
-## Tests
-
-We have a test script.
-It runs NetBox's own unit tests and ensures that NetBox starts:
-
-```bash
-IMAGE=docker.io/netboxcommunity/netbox:latest ./test.sh
-```
-
-## Support
-
-This repository is currently maintained by the community.
-The community is expected to help each other.
-
-Please consider sponsoring the maintainers of this project.
+O principal objetivo da implementação é criar uma plataforma centralizada para inventariar todo o parque tecnológico da empresa, permitindo que as equipes de infraestrutura possuam uma visão completa e atualizada dos recursos existentes.
