@@ -32,10 +32,6 @@ Circuitos de telecomunicações
 
 ✅ Automação com ferramentas como:
 
-Zabbix
-Ansible
-Terraform
-Nautobot
 
 # Contexto do Projeto NetBox em Docker Compose
 Neste projeto, o NetBox está sendo implantado utilizando containers Docker gerenciados por Docker Compose. Essa abordagem facilita a instalação, atualização, backup e manutenção da plataforma.
