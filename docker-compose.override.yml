@@ -1,0 +1,28 @@
+services:
+  netbox:
+    image: netboxcommunity/netbox:v4.6-5.0.1
+    ports:
+      - "8000:8080"
+    user: 'root'
+    restart: unless-stopped
+    command: >
+      sh -c "/usr/local/bin/uv pip install --python /opt/netbox/venv/bin/python netbox-attachments  netbox-reorder-rack &&
+             /opt/netbox/launch-netbox.sh"
+
+  netbox-worker:
+    image: netboxcommunity/netbox:v4.6-5.0.1
+    user: 'root'
+    restart: unless-stopped
+    command: >
+      sh -c "/usr/local/bin/uv pip install --python /opt/netbox/venv/bin/python netbox-attachments netbox-reorder-rack &&
+             /opt/netbox/launch-netbox.sh"
+
+  postgres:
+    restart: unless-stopped
+
+  redis:
+    restart: unless-stopped
+
+  redis-cache:
+    restart: unless-stopped
+
