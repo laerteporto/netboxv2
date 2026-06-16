@@ -76,3 +76,4 @@ Orquestra todos os containers necessários para o funcionamento da solução.
 # Objetivo do Projeto
 
 O principal objetivo da implementação é criar uma plataforma centralizada para inventariar todo o parque tecnológico da empresa, permitindo que as equipes de infraestrutura possuam uma visão completa e atualizada dos recursos existentes.
+# netboxv2
