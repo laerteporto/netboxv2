@@ -11,3 +11,11 @@
 #     ADD YOUR SETTINGS HERE
 #   }
 # }
+
+PLUGINS = [
+    "netbox_attachments",
+    "netbox_reorder_rack",
+]
+
+
+
