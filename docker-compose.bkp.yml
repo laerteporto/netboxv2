@@ -17,9 +17,6 @@ services:
       - netbox-media-files:/opt/netbox/netbox/media:rw
       - netbox-reports-files:/opt/netbox/netbox/reports:rw
       - netbox-scripts-files:/opt/netbox/netbox/scripts:rw
-      # volume adicional para acessar imagens de elevação
-      - ./devicetype-library/elevation-images:/opt/netbox/elevation-images:ro
-
   netbox-worker:
     <<: *netbox
     depends_on:
@@ -53,8 +50,8 @@ services:
     image: docker.io/valkey/valkey:9.0-alpine
     command:
       - sh
-      - -c
-      - valkey-server --appendonly yes --requirepass $$REDIS_PASSWORD
+      - -c # this is to evaluate the $REDIS_PASSWORD from the env
+      - valkey-server --appendonly yes --requirepass $$REDIS_PASSWORD ## $$ because of docker-compose
     healthcheck: &redis-healthcheck
       test: '[ $$(valkey-cli --pass "$${REDIS_PASSWORD}" ping) = ''PONG'' ]'
       start_period: 5s
@@ -64,30 +61,16 @@ services:
     env_file: env/redis.env
     volumes:
       - netbox-redis-data:/data
-
   redis-cache:
     image: docker.io/valkey/valkey:9.0-alpine
     command:
       - sh
-      - -c
-      - valkey-server --requirepass $$REDIS_PASSWORD
+      - -c # this is to evaluate the $REDIS_PASSWORD from the env
+      - valkey-server --requirepass $$REDIS_PASSWORD ## $$ because of docker-compose
     healthcheck: *redis-healthcheck
     env_file: env/redis-cache.env
     volumes:
       - netbox-redis-cache-data:/data
-
-  # nginx para servir NetBox + imagens
-  nginx:
-    image: nginx:alpine
-    container_name: netbox-nginx
-    depends_on:
-      - netbox
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./devicetype-library/elevation-images:/usr/share/nginx/html/elevation-images:ro
-    ports:
-      - "8080:80"
-    restart: unless-stopped
 
 volumes:
   netbox-media-files:
@@ -102,4 +85,3 @@ volumes:
     driver: local
   netbox-scripts-files:
     driver: local
-
