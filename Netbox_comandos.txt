@@ -1,0 +1,36 @@
+Documentação para futuras instalações
+
+Sempre que instalar ou atualizar plugins no NetBox Docker:
+
+
+docker exec -it netbox bash
+
+cd /opt/netbox/netbox
+
+python3 manage.py collectstatic --noinput
+
+python3 manage.py migrate
+
+exit
+
+docker compose restart
+
+ou:
+
+docker restart netbox
+
+
+COMANDO EXECUTAR DENTRO DO NO CONTAINER
+
+cat > /opt/netbox/scripts/import_hpe_aruba.py << 'EOF'
+EOF NO FINAL DO SCRIPT
+
+
+COMANDO PARA COPIAR DO UBUNTU PARA DENTRO DO CONTAINER
+
+docker cp \
+~/netbox-scripts/import_device_images.py \
+netbox-docker-netbox-1:/opt/netbox/scripts/
+
+
+
